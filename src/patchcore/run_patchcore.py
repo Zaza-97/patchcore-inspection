@@ -7,12 +7,12 @@ import click
 import numpy as np
 import torch
 
-import patchcore.backbones
-import patchcore.common
-import patchcore.metrics
-import patchcore.patchcore
-import patchcore.sampler
-import patchcore.utils
+import backbones
+import common
+import metrics
+import patchcore
+import sampler
+import utils
 
 LOGGER = logging.getLogger(__name__)
 
