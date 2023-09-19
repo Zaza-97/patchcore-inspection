@@ -44,13 +44,13 @@ def run(
 ):
     methods = {key: item for (key, item) in methods}
 
-    run_save_path = patchcore.utils.create_storage_folder(
+    run_save_path = utils.create_storage_folder(
         results_path, log_project, log_group, mode="iterate"
     )
 
     list_of_dataloaders = methods["get_dataloaders"](seed)
 
-    device = patchcore.utils.set_torch_device(gpu)
+    device = utils.set_torch_device(gpu)
     # Device context here is specifically set and used later
     # because there was GPU memory-bleeding which I could only fix with
     # context managers.
@@ -71,7 +71,7 @@ def run(
             )
         )
 
-        patchcore.utils.fix_seeds(seed, device)
+        utils.fix_seeds(seed, device)
 
         dataset_name = dataloaders["training"].name
 
@@ -89,7 +89,7 @@ def run(
             for i, PatchCore in enumerate(PatchCore_list):
                 torch.cuda.empty_cache()
                 if PatchCore.backbone.seed is not None:
-                    patchcore.utils.fix_seeds(PatchCore.backbone.seed, device)
+                    utils.fix_seeds(PatchCore.backbone.seed, device)
                 LOGGER.info(
                     "Training models ({}/{})".format(i + 1, len(PatchCore_list))
                 )
@@ -291,12 +291,12 @@ def patch_core(
                 backbone_name, backbone_seed = backbone_name.split(".seed-")[0], int(
                     backbone_name.split("-")[-1]
                 )
-            backbone = patchcore.backbones.load(backbone_name)
+            backbone = backbones.load(backbone_name)
             backbone.name, backbone.seed = backbone_name, backbone_seed
 
-            nn_method = patchcore.common.FaissNN(faiss_on_gpu, faiss_num_workers)
+            nn_method = common.FaissNN(faiss_on_gpu, faiss_num_workers)
 
-            patchcore_instance = patchcore.patchcore.PatchCore(device)
+            patchcore_instance = patchcore.PatchCore(device)
             patchcore_instance.load(
                 backbone=backbone,
                 layers_to_extract_from=layers_to_extract_from,
@@ -321,11 +321,11 @@ def patch_core(
 def sampler(name, percentage):
     def get_sampler(device):
         if name == "identity":
-            return patchcore.sampler.IdentitySampler()
+            return sampler.IdentitySampler()
         elif name == "greedy_coreset":
-            return patchcore.sampler.GreedyCoresetSampler(percentage, device)
+            return sampler.GreedyCoresetSampler(percentage, device)
         elif name == "approx_greedy_coreset":
-            return patchcore.sampler.ApproximateGreedyCoresetSampler(percentage, device)
+            return sampler.ApproximateGreedyCoresetSampler(percentage, device)
 
     return ("get_sampler", get_sampler)
 
