@@ -163,7 +163,7 @@ def run(
                     run_save_path, "segmentation_images", dataset_name
                 )
                 os.makedirs(image_save_path, exist_ok=True)
-                patchcore.utils.plot_segmentation_images(
+                utils.plot_segmentation_images(
                     image_save_path,
                     image_paths,
                     segmentations,
@@ -174,12 +174,12 @@ def run(
                 )
 
             LOGGER.info("Computing evaluation metrics.")
-            auroc = patchcore.metrics.compute_imagewise_retrieval_metrics(
+            auroc = metrics.compute_imagewise_retrieval_metrics(
                 scores, anomaly_labels
             )["auroc"]
 
             # Compute PRO score & PW Auroc for all images
-            pixel_scores = patchcore.metrics.compute_pixelwise_retrieval_metrics(
+            pixel_scores = metrics.compute_pixelwise_retrieval_metrics(
                 segmentations, masks_gt
             )
             full_pixel_auroc = pixel_scores["auroc"]
@@ -189,7 +189,7 @@ def run(
             for i in range(len(masks_gt)):
                 if np.sum(masks_gt[i]) > 0:
                     sel_idxs.append(i)
-            pixel_scores = patchcore.metrics.compute_pixelwise_retrieval_metrics(
+            pixel_scores = metrics.compute_pixelwise_retrieval_metrics(
                 [segmentations[i] for i in sel_idxs],
                 [masks_gt[i] for i in sel_idxs],
             )
@@ -229,7 +229,7 @@ def run(
     result_metric_names = list(result_collect[-1].keys())[1:]
     result_dataset_names = [results["dataset_name"] for results in result_collect]
     result_scores = [list(results.values())[1:] for results in result_collect]
-    patchcore.utils.compute_and_store_final_results(
+    utils.compute_and_store_final_results(
         run_save_path,
         result_scores,
         column_names=result_metric_names,
