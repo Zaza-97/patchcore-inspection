@@ -21,6 +21,7 @@ _CLASSNAMES = [
     "transistor",
     "wood",
     "zipper",
+    "HU164_alto_3",
 ]
 
 IMAGENET_MEAN = [0.485, 0.456, 0.406]
