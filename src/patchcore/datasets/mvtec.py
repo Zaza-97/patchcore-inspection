@@ -47,8 +47,6 @@ class MVTecDataset(torch.utils.data.Dataset):
         imagesize=224,
         split=DatasetSplit.TRAIN,
         train_val_split=1.0,
-        self.transform_std = IMAGENET_STD
-        self.transform_mean = IMAGENET_MEAN
         **kwargs,
     ):
         """
@@ -67,6 +65,8 @@ class MVTecDataset(torch.utils.data.Dataset):
                    mvtec.DatasetSplit.TEST will also load mask data.
         """
         super().__init__()
+        self.transform_std = IMAGENET_STD
+        self.transform_mean = IMAGENET_MEAN
         self.source = source
         self.split = split
         self.classnames_to_use = [classname] if classname is not None else _CLASSNAMES
