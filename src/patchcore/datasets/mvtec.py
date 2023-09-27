@@ -46,6 +46,8 @@ class MVTecDataset(torch.utils.data.Dataset):
         imagesize=224,
         split=DatasetSplit.TRAIN,
         train_val_split=1.0,
+        self.transform_std = IMAGENET_STD
+        self.transform_mean = IMAGENET_MEAN
         **kwargs,
     ):
         """
@@ -87,6 +89,7 @@ class MVTecDataset(torch.utils.data.Dataset):
         self.transform_mask = transforms.Compose(self.transform_mask)
 
         self.imagesize = (3, imagesize, imagesize)
+
 
     def __getitem__(self, idx):
         classname, anomaly, image_path, mask_path = self.data_to_iterate[idx]
