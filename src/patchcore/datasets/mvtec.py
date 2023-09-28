@@ -76,7 +76,8 @@ class MVTecDataset(torch.utils.data.Dataset):
 
         self.transform_img = [
             transforms.CenterCrop([imagesize, imagesize]),
-            transforms.Resize(resize),
+            transforms.Resize((1344, 189)),
+            #transforms.Resize(resize),
             # transforms.CenterCrop(imagesize),
             transforms.ToTensor(),
             transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
@@ -85,14 +86,15 @@ class MVTecDataset(torch.utils.data.Dataset):
 
         self.transform_mask = [
             transforms.CenterCrop([imagesize, imagesize]),
-            transforms.Resize(resize),
+            transforms.Resize((1344, 189)),
+            #transforms.Resize(resize),
             #transforms.CenterCrop(imagesize),
             transforms.ToTensor(),
         ]
         self.transform_mask = transforms.Compose(self.transform_mask)
 
         # self.imagesize = (3, imagesize, imagesize)
-        self.imagesize = (3, resize, resize)
+        self.imagesize = (3, 1344, 189)
 
 
     def __getitem__(self, idx):
