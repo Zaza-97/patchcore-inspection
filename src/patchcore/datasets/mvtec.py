@@ -75,16 +75,18 @@ class MVTecDataset(torch.utils.data.Dataset):
         self.imgpaths_per_class, self.data_to_iterate = self.get_image_data()
 
         self.transform_img = [
+            transforms.CenterCrop([imagesize, imagesize]),
             transforms.Resize(resize),
-            transforms.CenterCrop(imagesize),
+            # transforms.CenterCrop(imagesize),
             transforms.ToTensor(),
             transforms.Normalize(mean=IMAGENET_MEAN, std=IMAGENET_STD),
         ]
         self.transform_img = transforms.Compose(self.transform_img)
 
         self.transform_mask = [
+            transforms.CenterCrop([imagesize, imagesize]),
             transforms.Resize(resize),
-            transforms.CenterCrop(imagesize),
+            #transforms.CenterCrop(imagesize),
             transforms.ToTensor(),
         ]
         self.transform_mask = transforms.Compose(self.transform_mask)
